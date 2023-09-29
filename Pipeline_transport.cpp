@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -84,6 +85,8 @@ int main()
 		{
 			cout << "\tПросмотр всех объектов\n\n";
 
+			
+
 			if (PipeName.empty())
 			{
 				cout << "Труб нет\n\n";
@@ -91,7 +94,14 @@ int main()
 
 			else
 			{
-				cout << "1) Труба "; cout << PipeName; cout << " длинною "; cout << dlina; cout << " и диаметром "; cout << diameter; cout << " Признак: "; cout << status; cout << "\n\n";
+				ifstream KCData("KC.txt");
+				string k;
+				while (getline(KCData, k))
+				{
+					KCData >> k;
+					cout << k << endl;
+				}
+				
 			}
 
 			if (KSName.empty())
@@ -101,7 +111,14 @@ int main()
 			
 			else
 			{
-				cout << "2) КС с названием "; cout << KSName; cout << " и числом цехов "; cout << plNum; cout << " Эффективность: "; cout << efficiency; cout << "\n\n";
+				ifstream pipeData("pipeline.txt");
+
+				string p;
+				while (getline(pipeData, p))
+				{
+					pipeData >> p;
+					cout << p << endl;
+				}
 			}
 		}
 
@@ -160,7 +177,7 @@ int main()
 		{
 
 			ofstream pipeData("pipeline.txt");
-			pipeData << "Труба ";  pipeData << PipeName; pipeData << " Длина: "; pipeData << dlina; pipeData << " Диаметр ";  pipeData << diameter; pipeData << "Признак: "; pipeData << status;
+			pipeData << "Труба ";  pipeData << PipeName; pipeData << " Длина: "; pipeData << dlina; pipeData << " Диаметр ";  pipeData << diameter; pipeData << " Признак: "; pipeData << status;
 			ofstream KSData("KC.txt");
 			KSData << KSName; KSData << " Число цехов: "; KSData << plNum; KSData << " Эффективность: "; KSData << efficiency;
 			cout << "Введённые данные были сохранены\n\n";
