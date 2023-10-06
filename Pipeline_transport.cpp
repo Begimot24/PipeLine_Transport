@@ -29,9 +29,9 @@ string get_str() {
 
 
 void menu() {
-	cout << "\t\t Select an operation \n\n";
-	cout << "1. Add a pipe \n";
-	cout << "2. Add CS \n";
+	cout << "\t\t Выберите операцию \n\n";
+	cout << "1. Добавить трубу \n";
+	cout << "2. Добавить КС \n";
 	cout << "3. Просмотр всех объектов \n";
 	cout << "4. Редактировать трубу \n";
 	cout << "5. Редактировать КС \n";
@@ -43,19 +43,24 @@ void menu() {
 
 void pipe_add(pipe& pipe_chr)
 {
-
-	cout << "Введите название трубы: \n";
-	pipe_chr.pipe_name = get_str();
-
-	cout << "Введите длину трубы: \n";
-	cin >> pipe_chr.dlina;
-
-	while (cin.fail() || cin.peek() != '\n' || pipe_chr.dlina < 0) {
+	do {
 		cin.clear();
-		cin.ignore(1000, 'n');
-		cout << "Ввод некорректный.Введите длину трубы : \n";
+		cin.ignore(10000, '\n');
+		cout << "Введите название трубы:";
+		getline(cin, pipe_chr.pipe_name);
+	} while (pipe_chr.pipe_name.empty());
+
+
+	do {
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+		}
+		cout << ". Введите длину трубы :";
 		cin >> pipe_chr.dlina;
-	}
+		
+		
+	} while (cin.fail());
 
 	cout << "Введите диаметр трубы: \n";
 
@@ -63,7 +68,7 @@ void pipe_add(pipe& pipe_chr)
 
 	while (cin.fail() || cin.peek() != '\n' || pipe_chr.diameter < 0) {
 		cin.clear();
-		cin.ignore(1000, 'n');
+		cin.ignore(1000, '\n');
 		cout << "Ввод некорректный.Введите диаметр трубы : \n";
 		cin >> pipe_chr.diameter;
 	}
@@ -124,10 +129,10 @@ void overview(pipe& pipe_chr, CS& cs_chr) {
 		cout << "Диаметр: " << pipe_chr.diameter << '\n';
 
 		if (pipe_chr.mntn == 1) {
-			cout << "В эксплуатации?: Yes\n";
+			cout << "В эксплуатации?: DA\n";
 		}
 		else {
-			cout << "В эксплуатации?: No\n";
+			cout << "В эксплуатации?: HET\n";
 		}
 	}
 	else {
@@ -159,7 +164,7 @@ void edit_pipe(pipe& pipe_chr) {
 
 		while (cin.fail() || cin.peek() != '\n' || pipe_chr.dlina < 0) {
 			cin.clear();
-			cin.ignore(1000, 'n');
+			cin.ignore(1000, '\n');
 			cout << "Ввод некорректный.Введите длину трубы : \n";
 			cin >> pipe_chr.dlina;
 		}
@@ -226,25 +231,12 @@ void edit_cs(CS& cs_chr) {
 
 }
 
-void save_pipe(pipe& pipe_chr, ofstream& write) {
-	if (write.is_open()) {
-		write << pipe_chr.pipe_name << endl;
-		write << pipe_chr.dlina << endl;
-		write << pipe_chr.diameter << endl;
-		write << pipe_chr.mntn << endl;
-	}
-	else {
-		cout << "Неполадки!";
-	}
-	cout << "Данные успешно сохранены." << endl;
-}
-
-void save_cs(CS& cs_chr, ofstream& write) {
+void save_pipe(pipe& pipe_chr, ofstream& out) {
 	if (out.is_open()) {
-		write << cs_chr.cs_name << endl;
-		write << cs_chr.cs_num << endl;
-		write << cs_chr.work_cs << endl;
-		write << cs_chr.efc << endl;
+		out << pipe_chr.pipe_name << endl;
+		out << pipe_chr.dlina << endl;
+		out << pipe_chr.diameter << endl;
+		out << pipe_chr.mntn << endl;
 	}
 	else {
 		cout << "Неполадки!";
@@ -252,12 +244,25 @@ void save_cs(CS& cs_chr, ofstream& write) {
 	cout << "Данные успешно сохранены." << endl;
 }
 
-void load_pipe(pipe& obj_pipe, ifstream& read) {
+void save_cs(CS& cs_chr, ofstream& out) {
+	if (out.is_open()) {
+		out << cs_chr.cs_name << endl;
+		out << cs_chr.cs_num << endl;
+		out << cs_chr.work_cs << endl;
+		out << cs_chr.efc << endl;
+	}
+	else {
+		cout << "Неполадки!";
+	}
+	cout << "Данные успешно сохранены." << endl;
+}
+
+void load_pipe(pipe& pipe_chr, ifstream& read) {
 	if (read.is_open()) {
-		read >> pipe_chr.name;
-		read >> pipe_chr.length;
+		read >> pipe_chr.pipe_name;
+		read >> pipe_chr.dlina;
 		read >> pipe_chr.diameter;
-		read >> pipe_chr.maintenance;
+		read >> pipe_chr.mntn;
 	}
 	else {
 		cout << "Неполадки!";
@@ -285,7 +290,7 @@ int main() {
 	cout << "\tБазовые сущности трубопроводного транспорта газа или нефти\n\n";
 
 	pipe pipe_chr;
-	CS ch_chr;
+	CS cs_chr;
 
 	ofstream out;		
 	ifstream read;		
@@ -295,7 +300,7 @@ int main() {
 		int option;
 
 		menu();
-		cin >> clear;
+		cin.clear();
 		cin >> option;
 
 		while (cin.fail() || cin.peek() != '\n' || option < 0) {
@@ -306,7 +311,7 @@ int main() {
 		}
 		switch (option) {
 		case 1:
-			add_pipe(pipe_chr);
+			pipe_add(pipe_chr);
 			break;
 		case 2:
 			add_cs(cs_chr);
@@ -321,19 +326,19 @@ int main() {
 			edit_cs(cs_chr);
 			break;
 		case 6:
-			write.open("file.txt");
-			write.close();
+			out.open("file.txt");
+			out.close();
 			if (!pipe_chr.pipe_name.empty()) {
-				write.open("file.txt", ios_base::app);
-				write << "pipe\n";
-				save_pipe(pipe_chr, write);
-				write.close();
+				out.open("file.txt", ios_base::app);
+				out << "pipe\n";
+				save_pipe(pipe_chr, out);
+				out.close();
 			}
 			if (!cs_chr.cs_name.empty()) {
-				write.open("Data.txt", ios_base::app);
-				write << "comp_station\n";
-				save_cs(cs_chr, write);
-				write.close();
+				out.open("Data.txt", ios_base::app);
+				out << "comp_station\n";
+				save_cs(cs_chr, out);
+				out.close();
 			}
 			break;
 		case 7:
