@@ -1,220 +1,368 @@
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <vector>
-#include <string>
+ï»¿#include <iostream>
+#include <fstream> 
+#include <sstream> 
+#include <string> 
 
 using namespace std;
 
+struct pipe {
+	string pipe_name;
+	int dlina;
+	int diameter;
+	bool mntn;
+};
 
-int main()
+struct CS {
+	string cs_name;
+	int cs_num;
+	int work_cs;
+	double efc;
+};
+
+
+string get_str() {
+	string str;
+	cin >> ws;
+	getline(std::cin, str);
+	return str;
+}
+
+
+void menu() {
+	cout << "\t\t Select an operation \n\n";
+	cout << "1. Add a pipe \n";
+	cout << "2. Add CS \n";
+	cout << "3. ĞŸÑ€Ğ¾ÑĞ¼Ğ¾Ñ‚Ñ€ Ğ²ÑĞµÑ… Ğ¾Ğ±ÑŠĞµĞºÑ‚Ğ¾Ğ² \n";
+	cout << "4. Ğ ĞµĞ´Ğ°ĞºÑ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ñ‚ÑŒ Ñ‚Ñ€ÑƒĞ±Ñƒ \n";
+	cout << "5. Ğ ĞµĞ´Ğ°ĞºÑ‚Ğ¸Ñ€Ğ¾Ğ²Ğ°Ñ‚ÑŒ ĞšĞ¡ \n";
+	cout << "6. Ğ¡Ğ¾Ñ…Ñ€Ğ°Ğ½Ğ¸Ñ‚ÑŒ \n";
+	cout << "7. Ğ—Ğ°Ğ³Ñ€ÑƒĞ·Ñ‚ÑŒ \n";
+	cout << "0. Ğ’Ñ‹Ñ…Ğ¾Ğ´\n\n"; 
+}
+
+
+void pipe_add(pipe& pipe_chr)
 {
-	while (true)
-	{
-		setlocale(LC_ALL, "Russian");
 
-		cout << "Áàçîâûå ñóùíîñòè òğóáîïğîâîäíîãî òğàíñïîğòà íåôòè è ãàçà\n\n";
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ½Ğ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ Ñ‚Ñ€ÑƒĞ±Ñ‹: \n";
+	pipe_chr.pipe_name = get_str();
 
-		cout << "\t\tÏîæàëóéñòà ââåäèòå íîìåğ îïåğàöèè:\n\n 1. Äîáàâèòü òğóáó\n 2. Äîáàâèòü ÊÑ\n 3. Ïğîñìîòğ âñåõ îáúåêòîâ\n 4. Ğåäàêòèğîâàòü òğóáó\n 5. Ğåäàêòèğîâàòü ÊÑ\n 6. Ñîõğàíèòü\n 7. Çàãğóçèòü\n 0. Âûõîä\n";
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ»Ğ¸Ğ½Ñƒ Ñ‚Ñ€ÑƒĞ±Ñ‹: \n";
+	cin >> pipe_chr.dlina;
 
-		int choice;
+	while (cin.fail() || cin.peek() != '\n' || pipe_chr.dlina < 0) {
+		cin.clear();
+		cin.ignore(1000, 'n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹.Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ»Ğ¸Ğ½Ñƒ Ñ‚Ñ€ÑƒĞ±Ñ‹ : \n";
+		cin >> pipe_chr.dlina;
+	}
 
-		cin >> choice;
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ¸Ğ°Ğ¼ĞµÑ‚Ñ€ Ñ‚Ñ€ÑƒĞ±Ñ‹: \n";
 
-		// Ïàğàìåòğû òğóáû
-		static string PipeName;
-		static double dlina;
-		static double diameter;
-		static string status;
+	cin >> pipe_chr.diameter;
 
-		//Ïàğàìåòğû ÊÑ
-		static string KSName;
-		static int plNum;
-		static string efficiency;
+	while (cin.fail() || cin.peek() != '\n' || pipe_chr.diameter < 0) {
+		cin.clear();
+		cin.ignore(1000, 'n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹.Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ¸Ğ°Ğ¼ĞµÑ‚Ñ€ Ñ‚Ñ€ÑƒĞ±Ñ‹ : \n";
+		cin >> pipe_chr.diameter;
+	}
+
+	cout << "ĞĞ°Ñ…Ğ¾Ğ´Ğ¸Ñ‚ÑÑ Ğ² ÑĞºÑĞ¿Ğ»ÑƒĞ°Ñ‚Ğ°Ñ†Ğ¸Ğ¸[1/0]?: \n";
+	cin >> pipe_chr.mntn;
+
+	while (cin.fail() || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. ĞĞ°Ñ…Ğ¾Ğ´Ğ¸Ñ‚ÑÑ Ğ² ÑĞºÑĞ¿Ğ»ÑƒĞ°Ñ‚Ğ°Ñ†Ğ¸Ğ¸?[1/0]: \n";
+		cin >> pipe_chr.mntn;
+	}
+}
+void add_cs(CS& cs_chr) {
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ½Ğ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ ĞºÑ: \n";
+	cs_chr.cs_name = get_str();
+
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ†ĞµÑ…Ğ¾Ğ²: \n";
+	cin >> cs_chr.cs_num;
+
+	while (cin.fail() || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ†ĞµÑ…Ğ¾Ğ²:  \n";
+		cin >> cs_chr.cs_num;
+	}
+
+	cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ñ… Ñ†ĞµÑ…Ğ¾Ğ²: \n";
+	cin >> cs_chr.work_cs;
+
+	while (cin.fail() || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ñ… Ñ†ĞµÑ…Ğ¾Ğ²:  \n";
+		cin >> cs_chr.work_cs;
+	}
+
+	cout << " Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ ÑÑ„Ñ„ĞµĞºÑ‚Ğ¸Ğ²Ğ½Ğ¾ÑÑ‚Ğ¸: \n";
+	cin >> cs_chr.efc;
+
+	while (cin.fail() || cin.peek() != '\n') {
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ ÑÑ„Ñ„ĞµĞºÑ‚Ğ¸Ğ²Ğ½Ğ¾ÑÑ‚Ğ¸:  \n";
+		cin >> cs_chr.efc;
+	}
+
+}
 
 
+void overview(pipe& pipe_chr, CS& cs_chr) {
+	if (!pipe_chr.pipe_name.empty()) {
+		cout << "\t\t Ğ¢Ñ€ÑƒĞ±Ñ‹ \n\n";
 
+		cout << "ĞĞ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ: " << pipe_chr.pipe_name << '\n';
+		cout << "Ğ”Ğ»Ğ¸Ğ½Ğ°: " << pipe_chr.dlina << '\n';
+		cout << "Ğ”Ğ¸Ğ°Ğ¼ĞµÑ‚Ñ€: " << pipe_chr.diameter << '\n';
 
+		if (pipe_chr.mntn == 1) {
+			cout << "Ğ’ ÑĞºÑĞ¿Ğ»ÑƒĞ°Ñ‚Ğ°Ñ†Ğ¸Ğ¸?: Yes\n";
+		}
+		else {
+			cout << "Ğ’ ÑĞºÑĞ¿Ğ»ÑƒĞ°Ñ‚Ğ°Ñ†Ğ¸Ğ¸?: No\n";
+		}
+	}
+	else {
 
+		cout << "Ğ¢Ñ€ÑƒĞ± - Ğ½ĞµÑ‚\n";
+	}
 
-		//äîáàâèòü òğóáó
-		if (choice == 1) {
+	if (!cs_chr.cs_name.empty()) {
 
+		cout << "\t\t ĞšĞ¾Ğ¼Ğ¿Ñ€ĞµÑÑĞ¾Ñ€Ğ½Ñ‹Ğµ ÑÑ‚Ğ°Ğ½Ñ†Ğ¸Ğ¸ \n\n";
 
-			cout << "Ïîæàëóéñòà, ââåäèòå õàğàêòåğèñòèêè òğóáû\n";
-			cout << "Êèëîìåòğîâàÿ îòìåòêà(íàçâàíèå): ";
-			cin >> PipeName;
+		cout << "ĞĞ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ: " << cs_chr.cs_name << '\n';
+		cout << "Ğ§Ğ¸ÑĞ»Ğ¾ Ñ†ĞµÑ…Ğ¾Ğ²: " << cs_chr.cs_num << '\n';
+		cout << "Ğ§Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ñ… Ñ†ĞµÑ…Ğ¾Ğ²: " << cs_chr.work_cs << '\n';
+		cout << "ĞšĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ ÑÑ„Ñ„ĞµĞºÑ‚Ğ¸Ğ²Ğ½Ğ¾ÑÑ‚Ğ¸: " << cs_chr.efc << '\n';
+	}
+	else {
+		cout << "\t\t ĞšĞ¾Ğ¼Ğ¿Ñ€ĞµÑÑĞ¾Ñ€Ğ½Ñ‹Ğµ ÑÑ‚Ğ°Ğ½Ñ†Ğ¸Ğ¸	\n";
+	}
+}
 
-			cout << "Âûáåğèòå äëèíó äëÿ "; cout << PipeName; cout << ":\n";
-			cin >> dlina;
+void edit_pipe(pipe& pipe_chr) {
+	if (pipe_chr.pipe_name.empty()) {        
+		cout << "Ğ¢Ñ€ÑƒĞ±Ğ° Ğ½Ğµ Ğ±Ñ‹Ğ»Ğ° ÑĞ¾Ğ·Ğ´Ğ°Ğ½Ğ°\n";
+	}
+	else {
+		cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ»Ğ¸Ğ½Ñƒ Ñ‚Ñ€ÑƒĞ±Ñ‹: \n";
+		cin >> pipe_chr.dlina;
 
-			cout << "Âûáåğèòå äèàìåòğ äëÿ "; cout << PipeName; cout << ":\n";
-			cin >> diameter;
-
-			
-			cout << "Ïğèçíàê (Repairing, IS): \n";
-			cin >> status;
-
-
-			cout << "Íîâàÿ òğóáà "; cout << PipeName; cout << " äëèííîş "; cout << dlina; cout << " äèàìåòğîì "; cout << diameter; cout << " ñ ïğèçíàêîì "; cout << status; cout << " áûëà óñïåøíî ñîçäàíà\n\n";
-
+		while (cin.fail() || cin.peek() != '\n' || pipe_chr.dlina < 0) {
+			cin.clear();
+			cin.ignore(1000, 'n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹.Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ»Ğ¸Ğ½Ñƒ Ñ‚Ñ€ÑƒĞ±Ñ‹ : \n";
+			cin >> pipe_chr.dlina;
 		}
 
-		//äîáàâèòü êñ
-		else if (choice == 2)
-		{
+		cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ¸Ğ°Ğ¼ĞµÑ‚Ñ€ Ñ‚Ñ€ÑƒĞ±Ñ‹: \n";
 
-			cout << "Ïîæàëóéñòà, ââåäèòå õàğàêòåğèñòèêè ÊÑ:\n";
+		cin >> pipe_chr.diameter;
 
-			cout << "Íàçâàíèå: \n";
-			cin >> KSName;
-
-			cout << "Êîëè÷åñòâî öåõîâ: \n";
-			cin >> plNum;
-
-			cout << "İôôåêòèâíîñòü (Íèçêàÿ, Ñğåäíÿÿ, âûñîêàÿ): \n";
-			cin >> efficiency;
-
-			cout << "ÊÑ ñ íàçâàíèåì "; cout << KSName; cout << " è ÷èñëîì öåõîâ "; cout << plNum; cout << " áûë óñïåøíî ñîçäàí. İôôåêòèâíîñòü: "; cout << efficiency; cout << "\n";
-
-
+		while (cin.fail() || cin.peek() != '\n' || pipe_chr.diameter < 0) {
+			cin.clear();
+			cin.ignore(1000, 'n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹.Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ğ´Ğ¸Ğ°Ğ¼ĞµÑ‚Ñ€ Ñ‚Ñ€ÑƒĞ±Ñ‹ : \n";
+			cin >> pipe_chr.diameter;
 		}
 
-		//ïğîñìîòğ âñåõ îáúåêòîâ
-		else if (choice == 3)
-		{
-			cout << "\tÏğîñìîòğ âñåõ îáúåêòîâ\n\n";
+		cout << "Ğ’ ÑĞºÑĞ¿Ğ»ÑƒĞ°Ñ‚Ğ°Ñ†Ğ¸Ğ¸[1/0]?:  \n";
+		cin >> pipe_chr.mntn;
 
-			
+		while (cin.fail() || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. : ";
+			cin >> pipe_chr.mntn;
+		}
+	}
+}
 
-			if (PipeName.empty())
-			{
-				cout << "Òğóá íåò\n\n";
+
+void edit_cs(CS& cs_chr) {
+	if (cs_chr.cs_name.empty()) {
+		cout << "ĞšĞ¾Ğ¼Ğ¿Ñ€ĞµÑÑĞ¾Ñ€Ğ½Ğ°Ñ ÑÑ‚Ğ°Ğ½Ñ†Ğ¸Ñ Ğ½Ğµ Ğ±Ñ‹Ğ»Ğ° ÑĞ¾Ğ·Ğ´Ğ°Ğ½Ğ°\n";
+	}
+	else {
+		cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ†ĞµÑ…Ğ¾Ğ²:";
+		cin >> cs_chr.cs_num;
+
+		while (cin.fail() || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ†ĞµÑ…Ğ¾Ğ²:  \n";
+			cin >> cs_chr.cs_num;
+		}
+
+		cout << "Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ñ… Ñ†ĞµÑ…Ğ¾Ğ²: \n";
+		cin >> cs_chr.work_cs;
+
+		while (cin.fail() || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ Ñ‡Ğ¸ÑĞ»Ğ¾ Ñ€Ğ°Ğ±Ğ¾Ñ‡Ğ¸Ñ… Ñ†ĞµÑ…Ğ¾Ğ²:  \n";
+			cin >> cs_chr.work_cs;
+		}
+
+		cout << " Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ ÑÑ„Ñ„ĞµĞºÑ‚Ğ¸Ğ²Ğ½Ğ¾ÑÑ‚Ğ¸: \n";
+		cin >> cs_chr.efc;
+		
+		while (cin.fail() || cin.peek() != '\n') {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Ğ’Ğ²Ğ¾Ğ´ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹. Ğ’Ğ²ĞµĞ´Ğ¸Ñ‚Ğµ ĞºĞ¾ÑÑ„Ñ„Ğ¸Ñ†Ğ¸ĞµĞ½Ñ‚ ÑÑ„Ñ„ĞµĞºÑ‚Ğ¸Ğ²Ğ½Ğ¾ÑÑ‚Ğ¸:  \n";
+			cin >> cs_chr.efc;
+		} 
+	}
+
+}
+
+void save_pipe(pipe& pipe_chr, ofstream& write) {
+	if (write.is_open()) {
+		write << pipe_chr.pipe_name << endl;
+		write << pipe_chr.dlina << endl;
+		write << pipe_chr.diameter << endl;
+		write << pipe_chr.mntn << endl;
+	}
+	else {
+		cout << "ĞĞµĞ¿Ğ¾Ğ»Ğ°Ğ´ĞºĞ¸!";
+	}
+	cout << "Ğ”Ğ°Ğ½Ğ½Ñ‹Ğµ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ ÑĞ¾Ñ…Ñ€Ğ°Ğ½ĞµĞ½Ñ‹." << endl;
+}
+
+void save_cs(CS& cs_chr, ofstream& write) {
+	if (out.is_open()) {
+		write << cs_chr.cs_name << endl;
+		write << cs_chr.cs_num << endl;
+		write << cs_chr.work_cs << endl;
+		write << cs_chr.efc << endl;
+	}
+	else {
+		cout << "ĞĞµĞ¿Ğ¾Ğ»Ğ°Ğ´ĞºĞ¸!";
+	}
+	cout << "Ğ”Ğ°Ğ½Ğ½Ñ‹Ğµ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ ÑĞ¾Ñ…Ñ€Ğ°Ğ½ĞµĞ½Ñ‹." << endl;
+}
+
+void load_pipe(pipe& obj_pipe, ifstream& read) {
+	if (read.is_open()) {
+		read >> pipe_chr.name;
+		read >> pipe_chr.length;
+		read >> pipe_chr.diameter;
+		read >> pipe_chr.maintenance;
+	}
+	else {
+		cout << "ĞĞµĞ¿Ğ¾Ğ»Ğ°Ğ´ĞºĞ¸!";
+	}
+	cout << "Ğ”Ğ°Ğ½Ğ½Ñ‹Ğµ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ Ğ·Ğ°Ğ³Ñ€ÑƒĞ¶ĞµĞ½Ñ‹." << endl;
+}
+
+void load_Ñs(CS& cs_chr, ifstream& read) {
+	if (read.is_open()) {
+		read >> cs_chr.cs_name;
+		read >> cs_chr.cs_num;
+		read >> cs_chr.work_cs;
+		read >> cs_chr.efc;
+	}
+	else {
+		cout << "ĞĞµĞ¿Ğ¾Ğ»Ğ°Ğ´ĞºĞ¸!";
+	}
+	cout << "Ğ”Ğ°Ğ½Ğ½Ñ‹Ğµ ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ Ğ·Ğ°Ğ³Ñ€ÑƒĞ¶ĞµĞ½Ñ‹." << endl;
+}
+
+int main() {
+
+	setlocale(LC_ALL, "Russian");
+	
+	cout << "\tĞ‘Ğ°Ğ·Ğ¾Ğ²Ñ‹Ğµ ÑÑƒÑ‰Ğ½Ğ¾ÑÑ‚Ğ¸ Ñ‚Ñ€ÑƒĞ±Ğ¾Ğ¿Ñ€Ğ¾Ğ²Ğ¾Ğ´Ğ½Ğ¾Ğ³Ğ¾ Ñ‚Ñ€Ğ°Ğ½ÑĞ¿Ğ¾Ñ€Ñ‚Ğ° Ğ³Ğ°Ğ·Ğ° Ğ¸Ğ»Ğ¸ Ğ½ĞµÑ„Ñ‚Ğ¸\n\n";
+
+	pipe pipe_chr;
+	CS ch_chr;
+
+	ofstream out;		
+	ifstream read;		
+	string line;
+
+	while (1) {
+		int option;
+
+		menu();
+		cin >> clear;
+		cin >> option;
+
+		while (cin.fail() || cin.peek() != '\n' || option < 0) {
+			cin.clear();
+			cin.ignore(1000, '\n');
+			cout << "Ğ’Ğ²ĞµĞ´Ñ‘Ğ½Ğ½Ñ‹Ğ¹ Ğ²Ğ°Ñ€Ğ¸Ğ°Ğ½Ñ‚ Ğ¾Ñ‚ÑÑƒÑ‚ÑÑ‚Ğ²ÑƒĞµÑ‚, Ğ¿Ğ¾Ğ¿Ñ‹Ñ‚Ğ°Ğ¹Ñ‚ĞµÑÑŒ ÑĞ½Ğ¾Ğ²Ğ°, Ğ¿Ğ¾Ğ¶Ğ°Ğ»ÑƒĞ¹ÑÑ‚Ğ°: ";
+			cin >> option;
+		}
+		switch (option) {
+		case 1:
+			add_pipe(pipe_chr);
+			break;
+		case 2:
+			add_cs(cs_chr);
+			break;
+		case 3:
+			overview(pipe_chr, cs_chr);
+			break;
+		case 4:
+			edit_pipe(pipe_chr);
+			break;
+		case 5:
+			edit_cs(cs_chr);
+			break;
+		case 6:
+			write.open("file.txt");
+			write.close();
+			if (!pipe_chr.pipe_name.empty()) {
+				write.open("file.txt", ios_base::app);
+				write << "pipe\n";
+				save_pipe(pipe_chr, write);
+				write.close();
 			}
-
-			else
-			{
-				ifstream KCData("KC.txt");
-				string k;
-				while (getline(KCData, k))
-				{
-					KCData >> k;
-					cout << k << endl;
+			if (!cs_chr.cs_name.empty()) {
+				write.open("Data.txt", ios_base::app);
+				write << "comp_station\n";
+				save_cs(cs_chr, write);
+				write.close();
+			}
+			break;
+		case 7:
+			read.open("Data.txt");
+			if (read.peek() == ifstream::traits_type::eof()) {  
+				cout << "Ğ”Ğ°Ğ½Ğ½Ñ‹Ğµ Ğ½Ğµ Ğ±Ñ‹Ğ»Ğ¸ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½Ñ‹";
+			}
+			else {
+				while (getline(read, line)) {
+					if (line.find("pipe") != string::npos) {
+						load_pipe(pipe_chr, read);
+					}
+					if (line.find("comp_station") != string::npos) {
+						load_Ñs(cs_chr, read);
+					}
 				}
-				
 			}
-
-			if (KSName.empty())
-			{
-				cout << "ÊÑ íåò\n\n";
-			}
-			
-			else
-			{
-				ifstream pipeData("pipeline.txt");
-
-				string p;
-				while (getline(pipeData, p))
-				{
-					pipeData >> p;
-					cout << p << endl;
-				}
-			}
-		}
-
-
-		//ğåäàêòèğîâàòü òğóáó
-		else if (choice == 4)
-		{
-			cout << "Ğåäàêòèğîâàòü òğóáó\n"; cout << PipeName; cout << "\n";
-			if (PipeName.empty())
-			{
-				cout << "Òğóáà åù¸ íå áûëà ñîçäàíà. Ïîæàëóéñòà ñîçäàéòå òğóáó\n\n";
-			}
-			else
-			{
-				cout << "Íàçâàíèå:\n";
-				cin >> PipeName;
-
-				cout << "Äëèíà:\n";
-				cin >> dlina;
-
-				cout << "Äèàìåòğ:\n";
-				cin >> diameter;
-
-				cout << "Ïğèçíàê:\n";
-				cin >> status;
-
-				cout << "Îïåğàöèÿ âûïîëíåíà óñïåøíî/n";
-			}
-		}
-
-		//ğåäàêòèğîâàòü êñ
-		else if (choice == 5)
-		{
-			cout << "Ğåäàêòèğîâàòü ÊÑ: \n";
-
-			if (KSName.empty())
-			{
-				cout << "Íåò äîáàâëåííûõ ÊÑ\n";
-			}
-			else
-			{
-				cout << "Íàçâàíèå: \n";
-				cin >> KSName;
-
-				cout << "×èñëî öåõîâ: \n";
-				cin >> plNum;
-
-				cout << "İôôåêòèâíîñòü: \n";
-				cin >> efficiency;
-
-				cout << "Îïåğàöèÿ âûïîëíåíà óñïåøíî\n\n";
-			}
-		}
-		//ñîõğàíèòü
-		else if (choice == 6)
-		{
-
-			ofstream pipeData("pipeline.txt");
-			pipeData << "Òğóáà ";  pipeData << PipeName; pipeData << " Äëèíà: "; pipeData << dlina; pipeData << " Äèàìåòğ ";  pipeData << diameter; pipeData << " Ïğèçíàê: "; pipeData << status;
-			ofstream KSData("KC.txt");
-			KSData << KSName; KSData << " ×èñëî öåõîâ: "; KSData << plNum; KSData << " İôôåêòèâíîñòü: "; KSData << efficiency;
-			cout << "Ââåä¸ííûå äàííûå áûëè ñîõğàíåíû\n\n";
-		}
-
-		//çàãğóçèòü
-		else if (choice == 7)
-		{
-			vector<double> pipeVector;
-			ifstream input_pipe("pipeline.txt");
-			double pipeVar;
-			while (input_pipe >> pipeVar)
-			{
-				pipeVector.push_back(pipeVar);
-			}
-
-			vector<double> kcVector;
-			ifstream input_kc("KC.txt");
-			double kcVar;
-			while (input_kc >> kcVar)
-			{
-				kcVector.push_back(kcVar);
-			}
-			
-		}
-
-		//âûõîä
-		else if (choice == 0)
-		{
+			break;
+		case 0:
+			cout << "Ğ’Ñ‹Ñ…Ğ¾Ğ´";
 			exit(0);
-		}
-
-		else
-		{
-			cout << "Íåâåğíûé òèï ââîäà. Ïîïûòàéòåñü ñíîâà.\n\n";
+		default:
+			cout << "Ğ’Ñ‹Ğ±ĞµÑ€Ğ¸Ñ‚Ğµ Ğ¾Ğ¿ĞµÑ€Ğ°Ñ†Ğ¸Ñ \n";
+			break;
 		}
 	}
 	return 0;
 }
+
+
+
 
